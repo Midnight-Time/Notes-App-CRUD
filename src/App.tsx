@@ -1,25 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import NewNote from "./components/Form/NewNote";
+import NotesList from "./components/Form/NotesList";
+/////
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+/////
+import { useState } from "react";
+
+interface Note {
+  id: string;
+  text: string;
+}
 
 function App() {
+  const [notes, setNotes] = useState<Note[]>([]);
+  // console.log(notes);
+
+  const noteAddHandler = (text: string) => {
+    setNotes((prevNotes) => [
+      ...prevNotes,
+      { id: Math.random().toString(), text: text },
+    ]);
+  };
+
+  const noteDeleteHandler = (noteID: string) => {
+    setNotes((prevNotes) => {
+      return prevNotes.filter((note) => note.id !== noteID);
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container maxWidth="sm" style={{ textAlign: "center", marginTop: "30px" }}>
+      <Typography variant="h5">Заметки</Typography>
+      <NewNote onAddNote={noteAddHandler} />
+      <NotesList notes={notes} onDeleteNote={noteDeleteHandler} />
+    </Container>
   );
 }
 
