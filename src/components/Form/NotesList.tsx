@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 /////
+import ModalEl from "./Modal";
 
 interface NotesListProps {
   notes: { id: string; text: string; tags: string[] }[];
@@ -15,55 +16,57 @@ interface NotesListProps {
 const NotesList: React.FC<NotesListProps> = (props) => {
   console.log(props.notes);
   return (
-    <List sx={{ mt: 3 }}>
-      {props.notes.map((note) => (
-        <ListItem
-          key={note.id}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            borderBottom: "1px solid #999",
-          }}
-        >
-          <Box
-            sx={{
-              mt: 2,
-              textAlign: "left",
-              gap: "10px",
+    <>
+      <List sx={{ mt: 3 }}>
+        {props.notes.map((note) => (
+          <ListItem
+            key={note.id}
+            style={{
               display: "flex",
-              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              borderBottom: "1px solid #999",
             }}
-            width="50%"
           >
-            <Typography
-              variant="body2"
-              align="left"
-              style={{ wordWrap: "break-word" }}
+            <Box
+              sx={{
+                mt: 2,
+                textAlign: "left",
+                gap: "10px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+              width="50%"
             >
-              {note.text}
-            </Typography>
-            <Box>
-              {note.tags.map((tag, i) => (
-                <span key={i} style={{ marginRight: "10px", color: "blue" }}>
-                  {tag}
-                </span>
-              ))}
+              <Typography
+                variant="body2"
+                align="left"
+                style={{ wordWrap: "break-word" }}
+              >
+                {note.text}
+              </Typography>
+              <Box>
+                {note.tags.map((tag, i) => (
+                  <span key={i} style={{ marginRight: "10px", color: "blue" }}>
+                    {tag}
+                  </span>
+                ))}
+              </Box>
             </Box>
-          </Box>
-          <Box style={{ marginLeft: "auto" }}>
-            <Button>Редактировать</Button>
-            <Button
-              onClick={props.onDeleteNote.bind(null, note.id)}
-              variant="outlined"
-            >
-              Удалить
-            </Button>
-          </Box>
-        </ListItem>
-      ))}
-    </List>
+            <Box style={{ marginLeft: "auto", display: "flex" }}>
+              <ModalEl />
+              <Button
+                onClick={props.onDeleteNote.bind(null, note.id)}
+                variant="outlined"
+              >
+                Удалить
+              </Button>
+            </Box>
+          </ListItem>
+        ))}
+      </List>
+    </>
   );
 };
 

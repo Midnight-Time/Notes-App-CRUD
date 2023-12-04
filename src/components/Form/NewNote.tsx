@@ -17,7 +17,7 @@ const NewNote: React.FC<NewNoteProps> = (props) => {
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const enteredText = e.currentTarget!.value;
-    const val = enteredText.split(/(#[a-z\d-]+)/gi);
+    const val = enteredText.split(/(#[a-z,а-я\d-]+)/gi);
     let array = [];
     for (let i = 0; i < val.length; i++) {
       if (val[i].charAt(0) === "#") {
@@ -32,6 +32,7 @@ const NewNote: React.FC<NewNoteProps> = (props) => {
     const enteredText = textInputRef.current!.value;
     const val = enteredText.replaceAll("#", "");
     props.onAddNote(val, tags);
+    textInputRef.current!.value = "";
   };
 
   return (
