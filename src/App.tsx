@@ -10,16 +10,17 @@ import { useState } from "react";
 interface Note {
   id: string;
   text: string;
+  tags: string[];
 }
 
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);
   // console.log(notes);
 
-  const noteAddHandler = (text: string) => {
+  const noteAddHandler = (text: string, tags: string[]) => {
     setNotes((prevNotes) => [
       ...prevNotes,
-      { id: Math.random().toString(), text: text },
+      { id: Math.random().toString(), text: text, tags: tags },
     ]);
   };
 

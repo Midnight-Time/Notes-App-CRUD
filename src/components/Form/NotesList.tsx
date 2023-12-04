@@ -8,11 +8,12 @@ import Typography from "@mui/material/Typography";
 /////
 
 interface NotesListProps {
-  notes: { id: string; text: string }[];
+  notes: { id: string; text: string; tags: string[] }[];
   onDeleteNote: (noteID: string) => void;
 }
 
 const NotesList: React.FC<NotesListProps> = (props) => {
+  console.log(props.notes);
   return (
     <List sx={{ mt: 3 }}>
       {props.notes.map((note) => (
@@ -26,14 +27,31 @@ const NotesList: React.FC<NotesListProps> = (props) => {
             borderBottom: "1px solid #999",
           }}
         >
-          <Typography
+          <Box
+            sx={{
+              mt: 2,
+              textAlign: "left",
+              gap: "10px",
+              display: "flex",
+              flexDirection: "column",
+            }}
             width="50%"
-            variant="body2"
-            align="left"
-            style={{ wordWrap: "break-word" }}
           >
-            {note.text}
-          </Typography>
+            <Typography
+              variant="body2"
+              align="left"
+              style={{ wordWrap: "break-word" }}
+            >
+              {note.text}
+            </Typography>
+            <Box>
+              {note.tags.map((tag, i) => (
+                <span key={i} style={{ marginRight: "10px", color: "blue" }}>
+                  {tag}
+                </span>
+              ))}
+            </Box>
+          </Box>
           <Box style={{ marginLeft: "auto" }}>
             <Button>Редактировать</Button>
             <Button

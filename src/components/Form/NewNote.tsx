@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React, { ChangeEvent, FormEvent } from "react";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -8,17 +8,15 @@ import { useRef } from "react";
 import { useState } from "react";
 
 interface NewNoteProps {
-  onAddNote: (todoText: string) => void;
+  onAddNote: (noteText: string, tags: string[]) => void;
 }
 
 const NewNote: React.FC<NewNoteProps> = (props) => {
   const textInputRef = useRef<HTMLInputElement>(null);
   const [tags, setTags] = useState<string[]>([]);
 
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const enteredText = textInputRef.current!.value;
-    props.onAddNote(enteredText);
+  const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const enteredText = e.currentTarget!.value;
     const val = enteredText.split(/(#[a-z\d-]+)/gi);
     let array = [];
     for (let i = 0; i < val.length; i++) {
@@ -29,6 +27,13 @@ const NewNote: React.FC<NewNoteProps> = (props) => {
     }
   };
 
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const enteredText = textInputRef.current!.value;
+    const val = enteredText.replaceAll("#", "");
+    props.onAddNote(val, tags);
+  };
+
   return (
     <form onSubmit={submitHandler}>
       <FormControl style={{ width: "100%", marginTop: "30px" }}>
@@ -37,12 +42,9 @@ const NewNote: React.FC<NewNoteProps> = (props) => {
           multiline
           minRows={3}
           inputRef={textInputRef}
+          onChange={changeHandler}
         />
-        <Box sx={{ mt: 2, textAlign: "left", gap: "10px", display: "flex" }}>
-          {tags.map((tag) => (
-            <span>{tag}</span>
-          ))}
-        </Box>
+
         <Box marginTop={3}>
           <Button type="submit" variant="contained">
             Создать
@@ -53,8 +55,3 @@ const NewNote: React.FC<NewNoteProps> = (props) => {
   );
 };
 export default NewNote;
-
-// const [value, setValue] = useState<string>("");
-// const changeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-//   setValue(e.currentTarget!.value);
-// };
