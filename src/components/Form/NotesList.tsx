@@ -7,7 +7,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 /////
 import { useAppSelector } from "../hooks/redux-hooks";
-import { allNotes, edited } from "../store/note-slice";
+import { allNotes, editIsOpen } from "../store/note-slice";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { removeNote } from "../store/note-slice";
 import { openEdit } from "../store/edit-slice";
@@ -23,7 +23,7 @@ interface NotesListProps {
 
 const NotesList: React.FC<NotesListProps> = (props) => {
   const noteList = useAppSelector(allNotes);
-  const editedNote = useAppSelector(edited);
+  const isOpen = useAppSelector(editIsOpen);
   const dispatch = useAppDispatch();
   const [noteToEdit, setNoteTiEdit] = useState<Note | null>(null);
 
@@ -89,9 +89,7 @@ const NotesList: React.FC<NotesListProps> = (props) => {
                 </Button>
               </Box>
             </ListItem>
-            {noteToEdit?.id === note.id && editedNote && (
-              <NewNote note={note} />
-            )}
+            {noteToEdit?.id === note.id && isOpen && <NewNote note={note} />}
           </div>
         ))}
       </List>

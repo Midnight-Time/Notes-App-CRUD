@@ -39,6 +39,6 @@ export const noteSlice = createSlice({
 });
 export const { addNote, removeNote, editNote } = noteSlice.actions;
 export const allNotes = (state: RootState) => state.notes;
-export const edited = (state: RootState) => state.edit.isOpen;
+export const editIsOpen = (state: RootState) => state.edit.isOpen;
 
 export default noteSlice.reducer;
