@@ -9,11 +9,13 @@ import { useState } from "react";
 /////
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { addNote } from "../store/note-slice";
+import { Typography } from "@mui/material";
 
 const NewNote = () => {
   const dispatch = useAppDispatch();
   const textInputRef = useRef<HTMLInputElement>(null);
   const [tags, setTags] = useState<string[]>([]);
+  const [showError, setShowError] = useState<boolean>(false);
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const enteredText = e.currentTarget!.value;
@@ -30,12 +32,17 @@ const NewNote = () => {
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const enteredText = textInputRef.current!.value;
+    if (enteredText === "") {
+      setShowError(true);
+      return;
+    }
     const newNote = {
       id: new Date().toString(),
       text: enteredText,
       tags: tags,
     };
     dispatch(addNote(newNote));
+    setShowError(false);
     textInputRef.current!.value = "";
   };
 
@@ -49,8 +56,10 @@ const NewNote = () => {
           inputRef={textInputRef}
           onChange={changeHandler}
         />
-
-        <Box marginTop={3}>
+        {showError && (
+          <Typography marginTop={1}>Напишите свои планы</Typography>
+        )}
+        <Box marginTop={2}>
           <Button type="submit" variant="contained">
             Создать
           </Button>

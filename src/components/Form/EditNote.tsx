@@ -5,7 +5,6 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 /////
 import { useRef } from "react";
-// import { useState } from "react";
 /////
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { editNote } from "../store/note-slice";
