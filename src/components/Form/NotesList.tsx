@@ -70,7 +70,11 @@ const NotesList: React.FC<NotesListProps> = (props) => {
                   {note.tags.map((tag, i) => (
                     <span
                       key={i}
-                      style={{ marginRight: "10px", color: "blue" }}
+                      style={{
+                        marginRight: "10px",
+                        color: "blue",
+                        cursor: "pointer",
+                      }}
                     >
                       {tag}
                     </span>

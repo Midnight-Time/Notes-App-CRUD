@@ -3,7 +3,8 @@ const createTags = (enteredText: string) => {
   let array: string[] = [];
   for (let i = 0; i < val.length; i++) {
     if (val[i].charAt(0) === "#") {
-      array.push(val[i]);
+      const tagWithoutSymbols = val[i].replace(/[.,/!$%^&*;:{}=\-_`~()]/g, "");
+      array.push(tagWithoutSymbols);
     }
   }
   let filteredArray = array.filter((tag, i) => {

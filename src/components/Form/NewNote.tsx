@@ -73,6 +73,11 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
     }
   };
 
+  const cancelInput = () => {
+    textInputRef.current!.value = "";
+    textInputRef.current!.focus();
+  };
+
   return (
     <form onSubmit={submitHandler}>
       <FormControl style={{ width: "100%", marginTop: "30px" }}>
@@ -88,7 +93,11 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
         <Box marginTop={2}>
           {props.note ? (
             <>
-              <Button type="submit" variant="contained">
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ marginRight: "5px" }}
+              >
                 Сохранить
               </Button>
               <Button onClick={() => dispatch(openEdit(false))}>
@@ -96,9 +105,18 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
               </Button>
             </>
           ) : (
-            <Button type="submit" variant="contained">
-              Создать
-            </Button>
+            <>
+              <Button
+                type="submit"
+                variant="contained"
+                sx={{ marginRight: "5px" }}
+              >
+                Создать
+              </Button>
+              <Button variant="text" onClick={cancelInput}>
+                Очистить
+              </Button>
+            </>
           )}
         </Box>
       </FormControl>
