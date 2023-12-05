@@ -9,13 +9,8 @@ import { useState } from "react";
 /////
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { addNote } from "../store/note-slice";
-// import { Note } from "../models";
 
-interface NewNoteProps {
-  onAddNote: (noteText: string, tags: string[]) => void;
-}
-
-const NewNote: React.FC<NewNoteProps> = (props) => {
+const NewNote = () => {
   const dispatch = useAppDispatch();
   const textInputRef = useRef<HTMLInputElement>(null);
   const [tags, setTags] = useState<string[]>([]);
@@ -42,7 +37,6 @@ const NewNote: React.FC<NewNoteProps> = (props) => {
       tags: tags,
     };
     dispatch(addNote(newNote));
-    props.onAddNote(val, tags);
     textInputRef.current!.value = "";
   };
 

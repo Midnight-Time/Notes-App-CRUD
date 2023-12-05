@@ -10,9 +10,8 @@ import ModalEl from "./Modal";
 /////
 import { useAppSelector } from "../hooks/redux-hooks";
 import { userSelector } from "../store/note-slice";
-////
-// import { useState, useEffect } from "react";
-// import { Note } from "../models";
+import { useAppDispatch } from "../hooks/redux-hooks";
+import { removeNote } from "../store/note-slice";
 
 interface NotesListProps {
   notes: { id: string; text: string; tags: string[] }[];
@@ -21,7 +20,12 @@ interface NotesListProps {
 
 const NotesList: React.FC<NotesListProps> = (props) => {
   const noteList = useAppSelector(userSelector);
-  // console.log(noteList.notes);
+  const dispatch = useAppDispatch();
+
+  const removeNoteHandler = (noteID: string) => {
+    dispatch(removeNote(noteID));
+  };
+
   return (
     <>
       <List sx={{ mt: 3 }}>
@@ -64,7 +68,7 @@ const NotesList: React.FC<NotesListProps> = (props) => {
             <Box style={{ marginLeft: "auto", display: "flex" }}>
               <ModalEl />
               <Button
-                onClick={props.onDeleteNote.bind(null, note.id)}
+                onClick={removeNoteHandler.bind(null, note.id)}
                 variant="outlined"
               >
                 Удалить

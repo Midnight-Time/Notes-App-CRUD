@@ -27,7 +27,7 @@ export const noteSlice = createSlice({
     },
     removeNote(state, action: PayloadAction<string>) {
       const id = action.payload;
-      state.notes.filter((note) => note.id !== id);
+      state.notes = state.notes.filter((note) => note.id !== id);
     },
   },
 });
