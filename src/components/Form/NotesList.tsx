@@ -10,6 +10,9 @@ import ModalEl from "./Modal";
 /////
 import { useAppSelector } from "../hooks/redux-hooks";
 import { userSelector } from "../store/note-slice";
+////
+// import { useState, useEffect } from "react";
+// import { Note } from "../models";
 
 interface NotesListProps {
   notes: { id: string; text: string; tags: string[] }[];
@@ -17,14 +20,12 @@ interface NotesListProps {
 }
 
 const NotesList: React.FC<NotesListProps> = (props) => {
-  let noteList = useAppSelector(userSelector);
-  console.log(props.notes);
-  console.log(noteList);
-
+  const noteList = useAppSelector(userSelector);
+  // console.log(noteList.notes);
   return (
     <>
       <List sx={{ mt: 3 }}>
-        {noteList.map((note) => (
+        {noteList.notes.map((note) => (
           <ListItem
             key={note.id}
             style={{

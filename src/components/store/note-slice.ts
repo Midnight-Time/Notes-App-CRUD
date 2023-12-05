@@ -3,13 +3,13 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
 import { Note } from "../models";
 
-const initialState: Array<Note> = [
-  {
-    id: "",
-    text: "",
-    tags: [],
-  },
-];
+export interface Notes {
+  notes: Array<Note>;
+}
+
+const initialState: Notes = {
+  notes: [],
+};
 
 export const noteSlice = createSlice({
   name: "note",
@@ -17,9 +17,9 @@ export const noteSlice = createSlice({
   reducers: {
     addNote(state, action: PayloadAction<Note>) {
       const newNote = action.payload;
-      const existingNote = state.find((note) => note.id === newNote.id);
+      const existingNote = state.notes.find((note) => note.id === newNote.id);
       if (!existingNote) {
-        state.push(action.payload);
+        state.notes.push(action.payload);
       } else {
         existingNote.text = newNote.text;
         existingNote.tags = newNote.tags;
@@ -27,7 +27,7 @@ export const noteSlice = createSlice({
     },
     removeNote(state, action: PayloadAction<string>) {
       const id = action.payload;
-      state.filter((note) => note.id !== id);
+      state.notes.filter((note) => note.id !== id);
     },
   },
 });
