@@ -10,6 +10,8 @@ import { useState } from "react";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { addNote } from "../store/note-slice";
 import { Typography } from "@mui/material";
+/////
+import { v4 as uuidv4 } from "uuid";
 
 const NewNote = () => {
   const dispatch = useAppDispatch();
@@ -20,13 +22,18 @@ const NewNote = () => {
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     const enteredText = e.currentTarget!.value;
     const val = enteredText.split(/(#[a-z,а-я\d-]+)/gi);
-    let array = [];
+    let array: string[] = [];
     for (let i = 0; i < val.length; i++) {
       if (val[i].charAt(0) === "#") {
         array.push(val[i]);
       }
-      setTags(array);
+
+      // setTags(array);
     }
+    let filteredArray = array.filter((tag, i) => {
+      return array.indexOf(tag) === i;
+    });
+    setTags(filteredArray);
   };
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
@@ -37,7 +44,7 @@ const NewNote = () => {
       return;
     }
     const newNote = {
-      id: new Date().toString(),
+      id: uuidv4(),
       text: enteredText,
       tags: tags,
     };
@@ -55,7 +62,7 @@ const NewNote = () => {
         return;
       }
       const newNote = {
-        id: new Date().toString(),
+        id: uuidv4(),
         text: enteredText,
         tags: tags,
       };
