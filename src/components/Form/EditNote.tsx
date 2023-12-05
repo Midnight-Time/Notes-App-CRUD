@@ -9,7 +9,6 @@ import { useRef } from "react";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { editNote } from "../store/note-slice";
 import { openEdit } from "../store/edit-slice";
-// import { Note } from "../models";
 
 interface EditNoteProps {
   note: { id: string; text: string; tags: string[] };

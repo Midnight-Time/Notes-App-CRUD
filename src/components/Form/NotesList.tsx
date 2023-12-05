@@ -11,11 +11,10 @@ import { allNotes, edited } from "../store/note-slice";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { removeNote } from "../store/note-slice";
 import { openEdit } from "../store/edit-slice";
-// import { Note } from "../models";
 /////
 import { useState } from "react";
-import EditNote from "./EditNote";
 import { Note } from "../models";
+import NewNote from "./NewNote";
 
 interface NotesListProps {
   notes: { id: string; text: string; tags: string[] }[];
@@ -91,7 +90,7 @@ const NotesList: React.FC<NotesListProps> = (props) => {
               </Box>
             </ListItem>
             {noteToEdit?.id === note.id && editedNote && (
-              <EditNote note={note} />
+              <NewNote note={note} />
             )}
           </div>
         ))}
