@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React from "react";
 /////
 import { useRef } from "react";
 import { useState } from "react";
@@ -14,39 +14,38 @@ import { addNote, editNote } from "../store/note-slice";
 import { openEdit } from "../store/edit-slice";
 /////
 import { v4 as uuidv4 } from "uuid";
+import createTags from "../utils/createTags";
 
 interface EditNoteProps {
   note?: { id: string; text: string; tags: string[] };
 }
+
+// type events = {
+//   event:  React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLDivElement>
+// }
 
 const NewNote: React.FC<EditNoteProps> = (props) => {
   const dispatch = useAppDispatch();
   const textInputRef = useRef<HTMLInputElement>(null);
   const [showError, setShowError] = useState<boolean>(false);
 
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+  // const updateData: events = (event) => {};
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const enteredText = textInputRef.current!.value;
     if (enteredText === "") {
       setShowError(true);
       return;
     }
-    const val = enteredText.split(/(#[a-z,а-я\d-]+)/gi);
-    let array: string[] = [];
-    for (let i = 0; i < val.length; i++) {
-      if (val[i].charAt(0) === "#") {
-        array.push(val[i]);
-      }
-    }
-    let filteredArray = array.filter((tag, i) => {
-      return array.indexOf(tag) === i;
-    });
+
+    const tags = createTags(enteredText);
 
     if (props?.note?.id) {
       const newNote = {
         id: props.note.id,
         text: enteredText,
-        tags: filteredArray,
+        tags: tags,
       };
       dispatch(editNote(newNote));
       dispatch(openEdit(false));
@@ -54,7 +53,7 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
       const newNote = {
         id: uuidv4(),
         text: enteredText,
-        tags: filteredArray,
+        tags: tags,
       };
       dispatch(addNote(newNote));
     }
@@ -63,6 +62,8 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
     textInputRef.current!.value = "";
     textInputRef.current!.focus();
   };
+
+  // Полностью логика совпадает. Потому, что при mulriline не работает сабмит через enter корректно
   const keyDownHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -71,22 +72,14 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
         setShowError(true);
         return;
       }
-      const val = enteredText.split(/(#[a-z,а-я\d-]+)/gi);
-      let array: string[] = [];
-      for (let i = 0; i < val.length; i++) {
-        if (val[i].charAt(0) === "#") {
-          array.push(val[i]);
-        }
-      }
-      let filteredArray = array.filter((tag, i) => {
-        return array.indexOf(tag) === i;
-      });
+
+      const tags = createTags(enteredText);
 
       if (props?.note?.id) {
         const newNote = {
           id: props.note.id,
           text: enteredText,
-          tags: filteredArray,
+          tags: tags,
         };
         dispatch(editNote(newNote));
         dispatch(openEdit(false));
@@ -94,7 +87,7 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
         const newNote = {
           id: uuidv4(),
           text: enteredText,
-          tags: filteredArray,
+          tags: tags,
         };
         dispatch(addNote(newNote));
       }
