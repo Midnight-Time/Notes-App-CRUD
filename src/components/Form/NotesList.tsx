@@ -7,6 +7,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 /////
 import ModalEl from "./Modal";
+/////
+import { useAppSelector } from "../hooks/redux-hooks";
+import { userSelector } from "../store/note-slice";
 
 interface NotesListProps {
   notes: { id: string; text: string; tags: string[] }[];
@@ -14,11 +17,14 @@ interface NotesListProps {
 }
 
 const NotesList: React.FC<NotesListProps> = (props) => {
+  let noteList = useAppSelector(userSelector);
   console.log(props.notes);
+  console.log(noteList);
+
   return (
     <>
       <List sx={{ mt: 3 }}>
-        {props.notes.map((note) => (
+        {noteList.map((note) => (
           <ListItem
             key={note.id}
             style={{

@@ -6,12 +6,17 @@ import Box from "@mui/material/Box";
 /////
 import { useRef } from "react";
 import { useState } from "react";
+/////
+import { useAppDispatch } from "../hooks/redux-hooks";
+import { addNote } from "../store/note-slice";
+// import { Note } from "../models";
 
 interface NewNoteProps {
   onAddNote: (noteText: string, tags: string[]) => void;
 }
 
 const NewNote: React.FC<NewNoteProps> = (props) => {
+  const dispatch = useAppDispatch();
   const textInputRef = useRef<HTMLInputElement>(null);
   const [tags, setTags] = useState<string[]>([]);
 
@@ -31,6 +36,12 @@ const NewNote: React.FC<NewNoteProps> = (props) => {
     e.preventDefault();
     const enteredText = textInputRef.current!.value;
     const val = enteredText.replaceAll("#", "");
+    const newNote = {
+      id: new Date().toString(),
+      text: val,
+      tags: tags,
+    };
+    dispatch(addNote(newNote));
     props.onAddNote(val, tags);
     textInputRef.current!.value = "";
   };
