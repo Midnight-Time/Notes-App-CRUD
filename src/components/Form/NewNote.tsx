@@ -20,18 +20,16 @@ interface EditNoteProps {
   note?: { id: string; text: string; tags: string[] };
 }
 
-// type events = {
-//   event:  React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLDivElement>
-// }
+type events =
+  | React.FormEvent<HTMLFormElement>
+  | React.KeyboardEvent<HTMLDivElement>;
 
 const NewNote: React.FC<EditNoteProps> = (props) => {
   const dispatch = useAppDispatch();
   const textInputRef = useRef<HTMLInputElement>(null);
   const [showError, setShowError] = useState<boolean>(false);
 
-  // const updateData: events = (event) => {};
-
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const updateData = (e: events) => {
     e.preventDefault();
     const enteredText = textInputRef.current!.value;
     if (enteredText === "") {
@@ -60,40 +58,17 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
 
     setShowError(false);
     textInputRef.current!.value = "";
+  };
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    updateData(e);
     textInputRef.current!.focus();
   };
 
   // Полностью логика совпадает. Потому, что при mulriline не работает сабмит через enter корректно
   const keyDownHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter") {
-      e.preventDefault();
-      const enteredText = textInputRef.current!.value;
-      if (enteredText === "") {
-        setShowError(true);
-        return;
-      }
-
-      const tags = createTags(enteredText);
-
-      if (props?.note?.id) {
-        const newNote = {
-          id: props.note.id,
-          text: enteredText,
-          tags: tags,
-        };
-        dispatch(editNote(newNote));
-        dispatch(openEdit(false));
-      } else {
-        const newNote = {
-          id: uuidv4(),
-          text: enteredText,
-          tags: tags,
-        };
-        dispatch(addNote(newNote));
-      }
-
-      setShowError(false);
-      textInputRef.current!.value = "";
+      updateData(e);
       textInputRef.current!.blur();
     }
   };

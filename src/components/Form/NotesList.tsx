@@ -64,7 +64,7 @@ const NotesList: React.FC<NotesListProps> = (props) => {
                   align="left"
                   style={{ wordWrap: "break-word" }}
                 >
-                  {note.text.replace("#", "")}
+                  {note.text.replaceAll("#", "")}
                 </Typography>
                 <Box>
                   {note.tags.map((tag, i) => (
