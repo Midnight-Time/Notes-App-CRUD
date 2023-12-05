@@ -9,6 +9,7 @@ import { useState } from "react";
 /////
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { addNote } from "../store/note-slice";
+import { openEdit } from "../store/edit-slice";
 // import { Note } from "../models";
 
 interface EditNoteProps {
@@ -16,7 +17,6 @@ interface EditNoteProps {
 }
 
 const EditNote: React.FC<EditNoteProps> = (props) => {
-  console.log(props);
   const dispatch = useAppDispatch();
   const textInputRef = useRef<HTMLInputElement>(null);
   const [tags, setTags] = useState<string[]>([]);
@@ -36,13 +36,14 @@ const EditNote: React.FC<EditNoteProps> = (props) => {
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const enteredText = textInputRef.current!.value;
-    const val = enteredText.replaceAll("#", "");
     const newNote = {
       id: props.note.id,
-      text: val,
+      text: enteredText,
       tags: tags,
     };
     dispatch(addNote(newNote));
+    dispatch(openEdit(false));
+
     textInputRef.current!.value = "";
   };
 

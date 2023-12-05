@@ -7,12 +7,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 /////
 import { useAppSelector } from "../hooks/redux-hooks";
-import { userSelector } from "../store/note-slice";
+import { allNotes, edited } from "../store/note-slice";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { removeNote } from "../store/note-slice";
+import { openEdit } from "../store/edit-slice";
 // import { Note } from "../models";
 /////
-import { useState } from "react";
+// import { useState } from "react";
 // import NewNote from "./NewNote";
 import EditNote from "./EditNote";
 
@@ -22,21 +23,25 @@ interface NotesListProps {
 }
 
 const NotesList: React.FC<NotesListProps> = (props) => {
-  const noteList = useAppSelector(userSelector);
+  const noteList = useAppSelector(allNotes);
+  const editedNote = useAppSelector(edited);
+  console.log(editedNote);
   const dispatch = useAppDispatch();
-  const [editIsOpen, setEditIsOpen] = useState<boolean>(false);
+  // const [editIsOpen, setEditIsOpen] = useState<boolean>(false);
 
   const removeNoteHandler = (noteID: string) => {
     dispatch(removeNote(noteID));
+  };
+  const editOpenHandler = () => {
+    dispatch(openEdit(true));
   };
 
   return (
     <>
       <List sx={{ mt: 3 }}>
         {noteList.notes.map((note) => (
-          <>
+          <div key={note.id}>
             <ListItem
-              key={note.id}
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -74,9 +79,7 @@ const NotesList: React.FC<NotesListProps> = (props) => {
                 </Box>
               </Box>
               <Box style={{ marginLeft: "auto", display: "flex" }}>
-                <Button onClick={() => setEditIsOpen(true)}>
-                  Редактировать
-                </Button>
+                <Button onClick={editOpenHandler}>Редактировать</Button>
                 <Button
                   onClick={removeNoteHandler.bind(null, note.id)}
                   variant="outlined"
@@ -85,8 +88,8 @@ const NotesList: React.FC<NotesListProps> = (props) => {
                 </Button>
               </Box>
             </ListItem>
-            {editIsOpen && <EditNote note={note} />}
-          </>
+            {editedNote && <EditNote note={note} />}
+          </div>
         ))}
       </List>
     </>

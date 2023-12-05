@@ -30,10 +30,9 @@ const NewNote = () => {
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const enteredText = textInputRef.current!.value;
-    const val = enteredText.replaceAll("#", "");
     const newNote = {
       id: new Date().toString(),
-      text: val,
+      text: enteredText,
       tags: tags,
     };
     dispatch(addNote(newNote));
