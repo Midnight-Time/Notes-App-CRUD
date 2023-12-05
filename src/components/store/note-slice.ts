@@ -29,15 +29,15 @@ export const noteSlice = createSlice({
       const id = action.payload;
       state.notes = state.notes.filter((note) => note.id !== id);
     },
-    // editNote(state, action: PayloadAction<Note>) {
-    //   const editedNote = action.payload;
-    //   state.notes = state.notes.map((note) =>
-    //     note.id === editedNote.id ? editedNote : note
-    //   );
-    // },
+    editNote(state, action: PayloadAction<Note>) {
+      const editedNote = action.payload;
+      state.notes = state.notes.map((note) =>
+        note.id === editedNote.id ? editedNote : note
+      );
+    },
   },
 });
-export const { addNote, removeNote } = noteSlice.actions;
+export const { addNote, removeNote, editNote } = noteSlice.actions;
 export const allNotes = (state: RootState) => state.notes;
 export const edited = (state: RootState) => state.edit.isOpen;
 

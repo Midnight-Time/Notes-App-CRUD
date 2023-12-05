@@ -13,9 +13,9 @@ import { removeNote } from "../store/note-slice";
 import { openEdit } from "../store/edit-slice";
 // import { Note } from "../models";
 /////
-// import { useState } from "react";
-// import NewNote from "./NewNote";
+import { useState } from "react";
 import EditNote from "./EditNote";
+import { Note } from "../models";
 
 interface NotesListProps {
   notes: { id: string; text: string; tags: string[] }[];
@@ -25,14 +25,14 @@ interface NotesListProps {
 const NotesList: React.FC<NotesListProps> = (props) => {
   const noteList = useAppSelector(allNotes);
   const editedNote = useAppSelector(edited);
-  console.log(editedNote);
   const dispatch = useAppDispatch();
-  // const [editIsOpen, setEditIsOpen] = useState<boolean>(false);
+  const [noteToEdit, setNoteTiEdit] = useState<Note | null>(null);
 
   const removeNoteHandler = (noteID: string) => {
     dispatch(removeNote(noteID));
   };
-  const editOpenHandler = () => {
+  const editOpenHandler = (note: Note) => {
+    setNoteTiEdit(note);
     dispatch(openEdit(true));
   };
 
@@ -79,7 +79,9 @@ const NotesList: React.FC<NotesListProps> = (props) => {
                 </Box>
               </Box>
               <Box style={{ marginLeft: "auto", display: "flex" }}>
-                <Button onClick={editOpenHandler}>Редактировать</Button>
+                <Button onClick={editOpenHandler.bind(null, note)}>
+                  Редактировать
+                </Button>
                 <Button
                   onClick={removeNoteHandler.bind(null, note.id)}
                   variant="outlined"
@@ -88,7 +90,9 @@ const NotesList: React.FC<NotesListProps> = (props) => {
                 </Button>
               </Box>
             </ListItem>
-            {editedNote && <EditNote note={note} />}
+            {noteToEdit?.id === note.id && editedNote && (
+              <EditNote note={note} />
+            )}
           </div>
         ))}
       </List>
