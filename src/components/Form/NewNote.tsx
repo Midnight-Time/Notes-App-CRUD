@@ -44,17 +44,36 @@ const NewNote = () => {
     dispatch(addNote(newNote));
     setShowError(false);
     textInputRef.current!.value = "";
+    textInputRef.current!.focus();
+  };
+  const keyDownHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const enteredText = textInputRef.current!.value;
+      if (enteredText === "") {
+        setShowError(true);
+        return;
+      }
+      const newNote = {
+        id: new Date().toString(),
+        text: enteredText,
+        tags: tags,
+      };
+      dispatch(addNote(newNote));
+      setShowError(false);
+      textInputRef.current!.value = "";
+      textInputRef.current!.blur();
+    }
   };
 
   return (
     <form onSubmit={submitHandler}>
       <FormControl style={{ width: "100%", marginTop: "30px" }}>
         <TextField
-          id="my-input"
-          multiline
-          minRows={3}
           inputRef={textInputRef}
           onChange={changeHandler}
+          multiline
+          onKeyDown={keyDownHandler}
         />
         {showError && (
           <Typography marginTop={1}>Напишите свои планы</Typography>
