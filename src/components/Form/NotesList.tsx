@@ -1,44 +1,18 @@
 import React from "react";
 /////
 import List from "@mui/material/List";
-import ListItem from "@mui/material/List";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 /////
 import { useAppSelector } from "../hooks/redux-hooks";
-import {
-  allNotes,
-  editIsOpen,
-  filteredNotes,
-  isFiltered,
-} from "../store/note-slice";
-import { useAppDispatch } from "../hooks/redux-hooks";
-import { removeNote } from "../store/note-slice";
-import { openEdit } from "../store/edit-slice";
+import { allNotes, filteredNotes, isFiltered } from "../store/note-slice";
 /////
-import { useState } from "react";
-import { Note } from "../models";
-/////
-import NewNote from "./NewNote";
 import NoResultsMgs from "./NoResultsMsg";
+import NotesListItem from "./NotesListItem";
 
 const NotesList = () => {
   const noteList = useAppSelector(allNotes);
   const filteredList = useAppSelector(filteredNotes);
-  const isOpen = useAppSelector(editIsOpen);
   const isFilter = useAppSelector(isFiltered);
-  const dispatch = useAppDispatch();
-  const [noteToEdit, setNoteTiEdit] = useState<Note | null>(null);
-  // const [showNoResults, setShowNoResults] = useState<boolean>(false);
 
-  const removeNoteHandler = (noteID: string) => {
-    dispatch(removeNote(noteID));
-  };
-  const editOpenHandler = (note: Note) => {
-    setNoteTiEdit(note);
-    dispatch(openEdit(true));
-  };
   const listToRender = filteredList.length > 0 ? filteredList : noteList;
 
   return (
@@ -46,68 +20,12 @@ const NotesList = () => {
       {isFilter && filteredList.length === 0 ? (
         <NoResultsMgs />
       ) : (
-        console.log("show list")
+        <List sx={{ mt: 3 }}>
+          {listToRender.map((note) => (
+            <NotesListItem note={note} />
+          ))}
+        </List>
       )}
-      <List sx={{ mt: 3 }}>
-        {listToRender.map((note) => (
-          <div key={note.id}>
-            <ListItem
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
-                borderBottom: "1px solid #999",
-              }}
-            >
-              <Box
-                sx={{
-                  mt: 2,
-                  textAlign: "left",
-                  gap: "10px",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-                width="50%"
-              >
-                <Typography
-                  variant="body2"
-                  align="left"
-                  style={{ wordWrap: "break-word" }}
-                >
-                  {note.text.replaceAll("#", "")}
-                </Typography>
-                <Box>
-                  {note.tags.map((tag, i) => (
-                    <span
-                      key={i}
-                      style={{
-                        marginRight: "10px",
-                        color: "blue",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </Box>
-              </Box>
-              <Box style={{ marginLeft: "auto", display: "flex" }}>
-                <Button onClick={editOpenHandler.bind(null, note)}>
-                  Редактировать
-                </Button>
-                <Button
-                  onClick={removeNoteHandler.bind(null, note.id)}
-                  variant="outlined"
-                >
-                  Удалить
-                </Button>
-              </Box>
-            </ListItem>
-            {noteToEdit?.id === note.id && isOpen && <NewNote note={note} />}
-          </div>
-        ))}
-      </List>
     </>
   );
 };

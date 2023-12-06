@@ -15,9 +15,10 @@ import { openEdit } from "../store/edit-slice";
 /////
 import { v4 as uuidv4 } from "uuid";
 import createTags from "../utils/createTags";
+import { Note } from "../models";
 
 interface EditNoteProps {
-  note?: { id: string; text: string; tags: string[] };
+  note?: Note;
 }
 
 type events =
