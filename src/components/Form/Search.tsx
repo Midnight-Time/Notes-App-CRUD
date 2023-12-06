@@ -5,13 +5,20 @@ import InputAdornment from "@mui/material/InputAdornment";
 // import { useState } from "react";
 import { useRef } from "react";
 /////
-import { useAppDispatch } from "../hooks/redux-hooks";
-import { filterNote } from "../store/note-slice";
+import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
+import { filterNote, allNotes, isFiltered } from "../store/note-slice";
 import { openSearchMsg } from "../store/edit-slice";
 
 const Search = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
+  const isFilter = useAppSelector(isFiltered);
+  const notes = useAppSelector(allNotes);
+
+  // Очистка поля поиска, если после поиска пользователь вводит новую заметку
+  if (!isFilter && notes.length > 0) {
+    searchInputRef.current!.value = "";
+  }
 
   const searchInputHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -10,8 +10,8 @@ import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 /////
 import { useAppDispatch } from "../hooks/redux-hooks";
-import { addNote, editNote } from "../store/note-slice";
-import { openEdit } from "../store/edit-slice";
+import { addNote, editNote, filterNote } from "../store/note-slice";
+import { openEdit, openSearchMsg } from "../store/edit-slice";
 /////
 import { v4 as uuidv4 } from "uuid";
 import createTags from "../utils/createTags";
@@ -59,6 +59,10 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
 
     setShowError(false);
     textInputRef.current!.value = "";
+
+    // Если добавляем новую заметку во время того как на экране список отфильтрованных, то убираем фильтр
+    dispatch(openSearchMsg(false));
+    dispatch(filterNote([""]));
   };
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
