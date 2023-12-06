@@ -5,10 +5,12 @@ import { Note } from "../models";
 
 export interface Notes {
   notes: Array<Note>;
+  filteredNotes: Array<Note>;
 }
 
 const initialState: Notes = {
   notes: [],
+  filteredNotes: [],
 };
 
 export const noteSlice = createSlice({
@@ -35,10 +37,21 @@ export const noteSlice = createSlice({
         note.id === editedNote.id ? editedNote : note
       );
     },
+    filterNote(state, action: PayloadAction<string>) {
+      const tags = action.payload;
+      if (tags !== "") {
+        state.filteredNotes = state.notes.filter((note) => {
+          return note.tags.includes(tags);
+        });
+      } else {
+        state.filteredNotes = [];
+      }
+    },
   },
 });
-export const { addNote, removeNote, editNote } = noteSlice.actions;
-export const allNotes = (state: RootState) => state.notes;
+export const { addNote, removeNote, editNote, filterNote } = noteSlice.actions;
+export const allNotes = (state: RootState) => state.notes.notes;
+export const filteredNotes = (state: RootState) => state.notes.filteredNotes;
 export const editIsOpen = (state: RootState) => state.edit.isOpen;
 
 export default noteSlice.reducer;

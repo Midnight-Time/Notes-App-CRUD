@@ -6,30 +6,15 @@ import Search from "./components/Form/Search";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 /////
-import { useState } from "react";
-
-interface Note {
-  id: string;
-  text: string;
-  tags: string[];
-}
+// import { useState } from "react";
 
 function App() {
-  const [notes, setNotes] = useState<Note[]>([]);
-  // console.log(notes);
-
-  const noteDeleteHandler = (noteID: string) => {
-    setNotes((prevNotes) => {
-      return prevNotes.filter((note) => note.id !== noteID);
-    });
-  };
-
   return (
     <Container maxWidth="sm" style={{ textAlign: "center", marginTop: "30px" }}>
       <Typography variant="h5">Заметки</Typography>
       <Search />
       <NewNote />
-      <NotesList notes={notes} onDeleteNote={noteDeleteHandler} />
+      <NotesList />
     </Container>
   );
 }

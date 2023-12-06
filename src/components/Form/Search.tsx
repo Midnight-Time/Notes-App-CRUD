@@ -1,12 +1,27 @@
 import TextField from "@mui/material/TextField";
 import { SearchSharp } from "@mui/icons-material";
 import InputAdornment from "@mui/material/InputAdornment";
+/////
+// import { useState } from "react";
+import { useRef } from "react";
+/////
+import { useAppDispatch } from "../hooks/redux-hooks";
+import { filterNote } from "../store/note-slice";
 
 const Search = () => {
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
+
+  const searchInputHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(filterNote(searchInputRef.current!.value));
+  };
+
   return (
     <div style={{ marginTop: "20px" }}>
-      <form>
+      <form onSubmit={searchInputHandler} onBlur={searchInputHandler}>
         <TextField
+          inputRef={searchInputRef}
           placeholder="Поиск по тэгу"
           size="small"
           sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" } }}
