@@ -7,19 +7,27 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 /////
 import { useAppSelector } from "../hooks/redux-hooks";
-import { allNotes, editIsOpen, filteredNotes } from "../store/note-slice";
+import {
+  allNotes,
+  editIsOpen,
+  filteredNotes,
+  isFiltered,
+} from "../store/note-slice";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { removeNote } from "../store/note-slice";
 import { openEdit } from "../store/edit-slice";
 /////
 import { useState } from "react";
 import { Note } from "../models";
+/////
 import NewNote from "./NewNote";
+import NoResultsMgs from "./NoResultsMsg";
 
 const NotesList = () => {
   const noteList = useAppSelector(allNotes);
   const filteredList = useAppSelector(filteredNotes);
   const isOpen = useAppSelector(editIsOpen);
+  const isFilter = useAppSelector(isFiltered);
   const dispatch = useAppDispatch();
   const [noteToEdit, setNoteTiEdit] = useState<Note | null>(null);
   // const [showNoResults, setShowNoResults] = useState<boolean>(false);
@@ -35,6 +43,11 @@ const NotesList = () => {
 
   return (
     <>
+      {isFilter && filteredList.length === 0 ? (
+        <NoResultsMgs />
+      ) : (
+        console.log("show list")
+      )}
       <List sx={{ mt: 3 }}>
         {listToRender.map((note) => (
           <div key={note.id}>

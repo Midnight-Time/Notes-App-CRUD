@@ -7,6 +7,7 @@ import { useRef } from "react";
 /////
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { filterNote } from "../store/note-slice";
+import { openSearchMsg } from "../store/edit-slice";
 
 const Search = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -15,6 +16,11 @@ const Search = () => {
   const searchInputHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(filterNote(searchInputRef.current!.value));
+    if (searchInputRef.current!.value !== "") {
+      dispatch(openSearchMsg(true));
+    } else {
+      dispatch(openSearchMsg(false));
+    }
   };
 
   return (
