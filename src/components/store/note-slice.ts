@@ -37,11 +37,17 @@ export const noteSlice = createSlice({
         note.id === editedNote.id ? editedNote : note
       );
     },
-    filterNote(state, action: PayloadAction<string>) {
+    filterNote(state, action: PayloadAction<string[]>) {
       const tags = action.payload;
-      if (tags !== "") {
-        state.filteredNotes = state.notes.filter((note) => {
-          return note.tags.includes(tags);
+      if (tags) {
+        let filtered: Note[] = [];
+        tags.forEach((tag) => {
+          state.notes.filter((note) => {
+            return note.tags.includes(tag) && filtered.push(note);
+          });
+        });
+        state.filteredNotes = filtered.filter((note, i) => {
+          return filtered.indexOf(note) === i;
         });
       } else {
         state.filteredNotes = [];

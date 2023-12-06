@@ -30,7 +30,7 @@ const NotesListItem: React.FC<NotesListItemProps> = (props) => {
   };
 
   return (
-    <div>
+    <>
       <ListItem
         style={{
           display: "flex",
@@ -87,7 +87,7 @@ const NotesListItem: React.FC<NotesListItemProps> = (props) => {
       {noteToEdit?.id === props.note.id && isOpen && (
         <NewNote note={props.note} />
       )}
-    </div>
+    </>
   );
 };
 

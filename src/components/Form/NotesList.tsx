@@ -22,7 +22,9 @@ const NotesList = () => {
       ) : (
         <List sx={{ mt: 3 }}>
           {listToRender.map((note) => (
-            <NotesListItem note={note} />
+            <div key={note.id}>
+              <NotesListItem note={note} />
+            </div>
           ))}
         </List>
       )}

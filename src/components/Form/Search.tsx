@@ -15,7 +15,8 @@ const Search = () => {
 
   const searchInputHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(filterNote(searchInputRef.current!.value));
+    const input = searchInputRef.current!.value;
+    dispatch(filterNote(input.split(" ")));
     if (searchInputRef.current!.value !== "") {
       dispatch(openSearchMsg(true));
     } else {
