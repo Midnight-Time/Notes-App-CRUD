@@ -1,4 +1,5 @@
 import TextField from "@mui/material/TextField";
+import IconButton from "@mui/material/IconButton";
 import { SearchSharp } from "@mui/icons-material";
 import InputAdornment from "@mui/material/InputAdornment";
 /////
@@ -25,6 +26,7 @@ const Search = () => {
   if (!isFilter && notes.length > 0) {
     searchInputRef.current!.value = "";
   }
+  // Если пользователь выбрал тэг кликом по нему, то это значение сразу идет и поле поиска
   if (collectedTags.length > 0) {
     searchInputRef.current!.value = collectedTags.join(" ");
   }
@@ -33,7 +35,11 @@ const Search = () => {
     e.preventDefault();
     const input = searchInputRef.current!.value;
     dispatch(filterNote(input.split(" ")));
+
+    // Сброс тэгов при сабмите
     dispatch(collectTags(""));
+
+    // Если пользователь хочет совершить поиск по тэгу, которого нет, то откроется сообщение
     if (searchInputRef.current!.value !== "") {
       dispatch(openSearchMsg(true));
     } else {
@@ -51,9 +57,11 @@ const Search = () => {
           sx={{ "& .MuiOutlinedInput-root": { borderRadius: "50px" } }}
           InputProps={{
             startAdornment: (
-              <InputAdornment position="start">
-                <SearchSharp />
-              </InputAdornment>
+              <IconButton type="submit">
+                <InputAdornment position="start">
+                  <SearchSharp />
+                </InputAdornment>
+              </IconButton>
             ),
           }}
         />

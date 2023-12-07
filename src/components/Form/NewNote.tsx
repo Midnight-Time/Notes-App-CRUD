@@ -1,5 +1,4 @@
 import React from "react";
-/////
 import { useRef } from "react";
 import { useState } from "react";
 /////
@@ -21,6 +20,7 @@ interface EditNoteProps {
   note?: Note;
 }
 
+// TextField: при mulriline=true сабмит не работает через enter, поэтому продублирована логика, и, следовательно, два типа событий
 type events =
   | React.FormEvent<HTMLFormElement>
   | React.KeyboardEvent<HTMLDivElement>;
@@ -33,6 +33,8 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
   const updateData = (e: events) => {
     e.preventDefault();
     const enteredText = textInputRef.current!.value;
+
+    // Если попытаться отправить пустую форму, то внизу формы появится сообщение
     if (enteredText === "") {
       setShowError(true);
       return;
@@ -40,6 +42,7 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
 
     const tags = createTags(enteredText);
 
+    // Редактирование / Создание новой заметки. В зависимость от условий
     if (props?.note?.id) {
       const newNote = {
         id: props.note.id,
@@ -65,6 +68,7 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
     dispatch(filterNote([""]));
   };
 
+  // Сабмит формы. .focus или .blur нужны, чтобы размер поля ввода возвращался к исходному размеру при сабмите/отмене
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     updateData(e);
     textInputRef.current!.focus();
@@ -78,6 +82,7 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
     }
   };
 
+  // Очистка поля, если пользователь нажал "Отменить"
   const cancelInput = () => {
     textInputRef.current!.value = "";
     textInputRef.current!.focus();

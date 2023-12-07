@@ -18,17 +18,20 @@ interface NotesListItemProps {
 
 const NotesListItem: React.FC<NotesListItemProps> = (props) => {
   const dispatch = useAppDispatch();
+  // boolean, указывает на то, активно окно редактирования или нет
   const isOpen = useAppSelector(editIsOpen);
   const [noteToEdit, setNoteTiEdit] = useState<Note | null>(null);
 
   const removeNoteHandler = (noteID: string) => {
     dispatch(removeNote(noteID));
   };
+
   const editOpenHandler = (note: Note) => {
     setNoteTiEdit(note);
     dispatch(openEdit(true));
   };
-  // собираю все тэги по клику на них
+
+  // Все тэги собираются по клику на них
   const tagsHandler = (tag: string) => {
     dispatch(collectTags(tag));
   };

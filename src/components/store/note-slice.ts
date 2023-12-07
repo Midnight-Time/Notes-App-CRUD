@@ -46,6 +46,7 @@ export const noteSlice = createSlice({
             return note.tags.includes(tag) && filtered.push(note);
           });
         });
+        // Убираем дубликаты, т.е. сообщение, где есть несколько тэгов выводится только один раз
         state.filteredNotes = filtered.filter((note, i) => {
           return filtered.indexOf(note) === i;
         });
