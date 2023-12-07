@@ -10,7 +10,7 @@ import NewNote from "./NewNote";
 /////
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
 import { removeNote, editIsOpen } from "../store/note-slice";
-import { openEdit } from "../store/edit-slice";
+import { openEdit, collectTags } from "../store/edit-slice";
 
 interface NotesListItemProps {
   note: Note;
@@ -27,6 +27,10 @@ const NotesListItem: React.FC<NotesListItemProps> = (props) => {
   const editOpenHandler = (note: Note) => {
     setNoteTiEdit(note);
     dispatch(openEdit(true));
+  };
+  // собираю все тэги по клику на них
+  const tagsHandler = (tag: string) => {
+    dispatch(collectTags(tag));
   };
 
   return (
@@ -60,6 +64,7 @@ const NotesListItem: React.FC<NotesListItemProps> = (props) => {
           <Box>
             {props.note?.tags.map((tag, i) => (
               <span
+                onClick={tagsHandler.bind(null, tag)}
                 key={i}
                 style={{
                   marginRight: "10px",
