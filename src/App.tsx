@@ -13,17 +13,17 @@ import { fetchNotes } from "./components/store/note-fetching";
 import { fetchingState } from "./components/store/note-slice";
 
 // Для того, чтобы useEffect не отправлял 2 get запроса при первоначальной загрузке страницы.
-let isInitial = true;
+// let isInitial = true;
 
 function App() {
   const dispatch = useAppDispatch();
   const loadingState = useAppSelector(fetchingState);
 
   useEffect(() => {
-    if (isInitial) {
-      isInitial = false;
-      return;
-    }
+    // if (isInitial) {
+    //   isInitial = false;
+    //   return;
+    // }
     dispatch(fetchNotes());
   }, [dispatch]);
 
