@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/github.io/Notes-App-CRUD/static/css/main.93a0497a.css",
+    "main.js": "/github.io/Notes-App-CRUD/static/js/main.7b7674e3.js",
+    "static/js/787.d4aba7ab.chunk.js": "/github.io/Notes-App-CRUD/static/js/787.d4aba7ab.chunk.js",
+    "index.html": "/github.io/Notes-App-CRUD/index.html",
+    "main.93a0497a.css.map": "/github.io/Notes-App-CRUD/static/css/main.93a0497a.css.map",
+    "main.7b7674e3.js.map": "/github.io/Notes-App-CRUD/static/js/main.7b7674e3.js.map",
+    "787.d4aba7ab.chunk.js.map": "/github.io/Notes-App-CRUD/static/js/787.d4aba7ab.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.93a0497a.css",
+    "static/js/main.7b7674e3.js"
+  ]
+}
