@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 /////
 import { useAppDispatch } from "../hooks/redux-hooks";
-import { addNewNote, editNote, filterNote } from "../store/note-slice";
+import { addNewNote, editNoteServer, filterNote } from "../store/note-slice";
 import { openEdit, openSearchMsg } from "../store/edit-slice";
 /////
 import { v4 as uuidv4 } from "uuid";
@@ -49,7 +49,7 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
         text: enteredText,
         tags: tags,
       };
-      dispatch(editNote(newNote));
+      dispatch(editNoteServer(newNote));
       dispatch(openEdit(false));
     } else {
       const newNote = {
@@ -57,7 +57,6 @@ const NewNote: React.FC<EditNoteProps> = (props) => {
         text: enteredText,
         tags: tags,
       };
-      // dispatch(addNote(newNote));
       dispatch(addNewNote(newNote));
     }
 

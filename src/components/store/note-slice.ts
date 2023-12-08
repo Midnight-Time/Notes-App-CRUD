@@ -5,6 +5,7 @@ import { Note } from "../models";
 /////
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+// Загружаем данные с сервера
 export const fetchNotes = createAsyncThunk(
   "notes/fetchNotes",
   async function (_, { rejectWithValue, dispatch }) {
@@ -25,6 +26,7 @@ export const fetchNotes = createAsyncThunk(
   }
 );
 
+// Удаляем заметку с сервера
 export const deleteNote = createAsyncThunk(
   "notes/deleteNote",
   async function (id: string, { rejectWithValue, dispatch }) {
@@ -64,6 +66,60 @@ export const deleteNote = createAsyncThunk(
   }
 );
 
+// Редактируем заметку на сервере
+export const editNoteServer = createAsyncThunk(
+  "notes/edinNoteServer",
+  async function (note: Note, { rejectWithValue, dispatch }) {
+    try {
+      // Из-за особенностей Firebase сначала нужно узнать, какому id на сервере соответствует id заметки, которую мы хотим изменить
+      const response = await fetch(
+        "https://my-project-83d90-default-rtdb.firebaseio.com/notes.json"
+      );
+
+      if (!response.ok) {
+        throw new Error("Не удается загрузить заметки");
+      }
+
+      const data = await response.json();
+      let serverId = "";
+
+      for (const key in data) {
+        if (data[key].id === note.id) {
+          serverId = key;
+        }
+      }
+
+      const editedNnote = {
+        id: note.id,
+        text: note.text,
+        tags: note.tags,
+        time: new Date(),
+      };
+
+      // В результате предыдущего запроса получили id и теперь изменяем заметку непосредственно на сервере
+      const responseDelete = await fetch(
+        `https://my-project-83d90-default-rtdb.firebaseio.com/notes/${serverId}.json`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedNnote),
+        }
+      );
+
+      if (!responseDelete.ok) {
+        throw new Error("Не удается изменить заметку");
+      }
+
+      dispatch(editNote(note));
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Отправляем новую запись на сервер
 export const addNewNote = createAsyncThunk(
   "notes/addNewNote",
   async function (note: Note, { rejectWithValue, dispatch }) {
@@ -145,6 +201,7 @@ export const noteSlice = createSlice({
     fetchedNotes(state, action: PayloadAction<any>) {
       const fetchedData = action.payload;
 
+      // Из-за того, что при фетчинге данных мы получаем объект с объектами, мы должны перевести его в массив, прежде чем изменять текущий state
       const transformData: Array<Note> = [];
       for (const key in fetchedData) {
         transformData.push({
@@ -155,7 +212,6 @@ export const noteSlice = createSlice({
       }
 
       state.notes = transformData;
-      console.log(transformData);
     },
   },
 });
