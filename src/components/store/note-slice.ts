@@ -2,6 +2,62 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
 import { Note } from "../models";
+/////
+import { createAsyncThunk } from "@reduxjs/toolkit";
+
+export const fetchNotes = createAsyncThunk(
+  "notes/fetchNotes",
+  async function (_, { rejectWithValue, dispatch }) {
+    try {
+      const response = await fetch(
+        "https://my-project-83d90-default-rtdb.firebaseio.com/notes.json"
+      );
+
+      if (!response.ok) {
+        throw new Error("Не удается загрузить заметки");
+      }
+
+      const data = await response.json();
+      dispatch(fetchedNotes(data));
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const addNewNote = createAsyncThunk(
+  "notes/addNewNote",
+  async function (note: Note, { rejectWithValue, dispatch }) {
+    try {
+      const newNnote = {
+        id: note.id,
+        text: note.text,
+        tags: note.tags,
+        time: new Date(),
+      };
+      const response = await fetch(
+        "https://my-project-83d90-default-rtdb.firebaseio.com/notes.json",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newNnote),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Не удается сохранить заметку");
+      }
+
+      dispatch(
+        addNote({ id: newNnote.id, text: newNnote.text, tags: newNnote.tags })
+      );
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export interface Notes {
   notes: Array<Note>;
@@ -18,14 +74,7 @@ export const noteSlice = createSlice({
   initialState,
   reducers: {
     addNote(state, action: PayloadAction<Note>) {
-      const newNote = action.payload;
-      const existingNote = state.notes.find((note) => note.id === newNote.id);
-      if (!existingNote) {
-        state.notes.push(action.payload);
-      } else {
-        existingNote.text = newNote.text;
-        existingNote.tags = newNote.tags;
-      }
+      state.notes.push(action.payload);
     },
     removeNote(state, action: PayloadAction<string>) {
       const id = action.payload;
@@ -54,9 +103,25 @@ export const noteSlice = createSlice({
         state.filteredNotes = [];
       }
     },
+    fetchedNotes(state, action: PayloadAction<any>) {
+      const fetchedData = action.payload;
+
+      const transformData: Array<Note> = [];
+      for (const key in fetchedData) {
+        transformData.push({
+          id: fetchedData[key].id,
+          text: fetchedData[key].text,
+          tags: fetchedData[key].tags || [],
+        });
+      }
+
+      state.notes = transformData;
+      console.log(transformData);
+    },
   },
 });
-export const { addNote, removeNote, editNote, filterNote } = noteSlice.actions;
+export const { addNote, removeNote, editNote, filterNote, fetchedNotes } =
+  noteSlice.actions;
 export const allNotes = (state: RootState) => state.notes.notes;
 export const filteredNotes = (state: RootState) => state.notes.filteredNotes;
 export const editIsOpen = (state: RootState) => state.edit.isOpen;

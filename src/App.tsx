@@ -6,9 +6,24 @@ import Search from "./components/Form/Search";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 /////
-// import { useState } from "react";
+import { useEffect } from "react";
+import { useAppDispatch } from "./components/hooks/redux-hooks";
+import { fetchNotes } from "./components/store/note-slice";
+
+// Для того, чтобы useEffect не отправлял 2 get запроса при первоначальной загрузке страницы.
+let isInitial = true;
 
 function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (isInitial) {
+      isInitial = false;
+      return;
+    }
+    dispatch(fetchNotes());
+  }, [dispatch]);
+
   return (
     <Container maxWidth="sm" style={{ textAlign: "center", marginTop: "30px" }}>
       <Typography variant="h5">Заметки</Typography>
