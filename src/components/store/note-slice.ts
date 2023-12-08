@@ -25,6 +25,45 @@ export const fetchNotes = createAsyncThunk(
   }
 );
 
+export const deleteNote = createAsyncThunk(
+  "notes/deleteNote",
+  async function (id: string, { rejectWithValue, dispatch }) {
+    try {
+      // Из-за особенностей Firebase сначала нужно узнать, какому id на сервере соответствует id заметки, которую мы хотим удалить
+      const response = await fetch(
+        "https://my-project-83d90-default-rtdb.firebaseio.com/notes.json"
+      );
+
+      if (!response.ok) {
+        throw new Error("Не удается загрузить заметки");
+      }
+
+      const data = await response.json();
+      let serverId = "";
+
+      for (const key in data) {
+        if (data[key].id === id) {
+          serverId = key;
+        }
+      }
+
+      // В результате предыдущего запроса получили id и теперь удаляем заметку непосредственно с сервера
+      const responseDelete = await fetch(
+        `https://my-project-83d90-default-rtdb.firebaseio.com/notes/${serverId}.json`,
+        { method: "DELETE" }
+      );
+
+      if (!responseDelete.ok) {
+        throw new Error("Не удается удалить заметку");
+      }
+
+      dispatch(removeNote(id));
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const addNewNote = createAsyncThunk(
   "notes/addNewNote",
   async function (note: Note, { rejectWithValue, dispatch }) {

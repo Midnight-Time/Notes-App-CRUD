@@ -9,7 +9,7 @@ import { useState } from "react";
 import NewNote from "./NewNote";
 /////
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
-import { removeNote, editIsOpen } from "../store/note-slice";
+import { deleteNote, editIsOpen } from "../store/note-slice";
 import { openEdit, collectTags } from "../store/edit-slice";
 
 interface NotesListItemProps {
@@ -23,7 +23,7 @@ const NotesListItem: React.FC<NotesListItemProps> = (props) => {
   const [noteToEdit, setNoteTiEdit] = useState<Note | null>(null);
 
   const removeNoteHandler = (noteID: string) => {
-    dispatch(removeNote(noteID));
+    dispatch(deleteNote(noteID));
   };
 
   const editOpenHandler = (note: Note) => {
