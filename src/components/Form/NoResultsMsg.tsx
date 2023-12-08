@@ -1,9 +1,14 @@
 import Typography from "@mui/material/Typography";
+import React from "react";
 
-const NoResultsMgs = () => {
+interface MsgProps{
+  message: string
+};
+
+const NoResultsMgs: React.FC<MsgProps> = (props) => {
   return (
     <Typography variant="body1" marginTop={6}>
-      Поиск по тэгу не дал результатов
+      {props.message}
     </Typography>
   );
 };

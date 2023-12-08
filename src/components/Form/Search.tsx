@@ -13,7 +13,7 @@ import {
   isFiltered,
   filteredTags,
 } from "../store/note-slice";
-import { openSearchMsg, collectTags } from "../store/edit-slice";
+import { openSearchMsg, collectTags } from "../store/ui_edit_tag-slice";
 
 const Search = () => {
   const searchInputRef = useRef<HTMLInputElement>(null);

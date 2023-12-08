@@ -72,5 +72,6 @@ export const filteredNotes = (state: RootState) => state.notes.filteredNotes;
 export const editIsOpen = (state: RootState) => state.edit.isOpen;
 export const isFiltered = (state: RootState) => state.edit.isFiltered;
 export const filteredTags = (state: RootState) => state.edit.filteredTags;
+export const fetchingState = (state: RootState) => state.statusState;
 
 export default noteSlice.reducer;

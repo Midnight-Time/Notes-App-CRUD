@@ -11,7 +11,7 @@ import { Typography } from "@mui/material";
 import { useAppDispatch } from "../hooks/redux-hooks";
 import { filterNote } from "../store/note-slice";
 import { addNewNote, editNoteServer } from "../store/note-fetching";
-import { openEdit, openSearchMsg } from "../store/edit-slice";
+import { openEdit, openSearchMsg } from "../store/ui_edit_tag-slice";
 /////
 import { v4 as uuidv4 } from "uuid";
 import createTags from "../utils/createTags";

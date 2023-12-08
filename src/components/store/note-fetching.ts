@@ -1,4 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Note } from "../models";
 import { addNote, editNote, fetchedNotes, removeNote } from "./note-slice";
 
@@ -11,14 +11,10 @@ export const fetchNotes = createAsyncThunk(
     try {
       const response = await fetch(URL);
 
-      if (!response.ok) {
-        throw new Error("Не удается загрузить заметки");
-      }
-
       const data = await response.json();
       dispatch(fetchedNotes(data));
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error) {
+      return rejectWithValue(error);
     }
   }
 );
@@ -30,11 +26,6 @@ export const deleteNote = createAsyncThunk(
     try {
       // Из-за особенностей Firebase сначала нужно узнать, какому id на сервере соответствует id заметки, которую мы хотим удалить
       const response = await fetch(URL);
-
-      if (!response.ok) {
-        throw new Error("Не удается загрузить заметки");
-      }
-
       const data = await response.json();
       let serverId = "";
 
@@ -68,11 +59,6 @@ export const editNoteServer = createAsyncThunk(
     try {
       // Из-за особенностей Firebase сначала нужно узнать, какому id на сервере соответствует id заметки, которую мы хотим изменить
       const response = await fetch(URL);
-
-      if (!response.ok) {
-        throw new Error("Не удается загрузить заметки");
-      }
-
       const data = await response.json();
       let serverId = "";
 
@@ -143,3 +129,32 @@ export const addNewNote = createAsyncThunk(
     }
   }
 );
+
+interface Istatus {
+  status: string;
+  satatusMsg: string;
+}
+const initialState: Istatus = {
+  status: "",
+  satatusMsg: "",
+};
+export const statusSlice = createSlice({
+  name: "statusState",
+  initialState,
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(fetchNotes.pending, (state) => {
+      state.status = "loading";
+      state.satatusMsg = "Идет загрузка...";
+    });
+    builder.addCase(fetchNotes.rejected, (state) => {
+      state.status = "rejected";
+      state.satatusMsg = "Не удалось загрузить заметки...";
+    });
+    builder.addCase(fetchNotes.fulfilled, (state) => {
+      state.status = "fulfilled";
+      state.satatusMsg = "";
+    });
+  },
+});
+export default statusSlice;

@@ -18,7 +18,7 @@ const NotesList = () => {
   return (
     <>
       {isFilter && filteredList.length === 0 ? (
-        <NoResultsMgs />
+        <NoResultsMgs message="Поиск по тэгу не дал результатов" />
       ) : (
         <List sx={{ mt: 3 }}>
           {listToRender.map((note) => (
