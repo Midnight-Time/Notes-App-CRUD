@@ -9,7 +9,8 @@ import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 /////
 import { useAppDispatch } from "../hooks/redux-hooks";
-import { addNewNote, editNoteServer, filterNote } from "../store/note-slice";
+import { filterNote } from "../store/note-slice";
+import { addNewNote, editNoteServer } from "../store/note-fetching";
 import { openEdit, openSearchMsg } from "../store/edit-slice";
 /////
 import { v4 as uuidv4 } from "uuid";

@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 /////
 import { useEffect } from "react";
 import { useAppDispatch } from "./components/hooks/redux-hooks";
-import { fetchNotes } from "./components/store/note-slice";
+import { fetchNotes } from "./components/store/note-fetching";
 
 // Для того, чтобы useEffect не отправлял 2 get запроса при первоначальной загрузке страницы.
 let isInitial = true;

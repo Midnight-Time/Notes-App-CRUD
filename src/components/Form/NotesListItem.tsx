@@ -9,7 +9,8 @@ import { useState } from "react";
 import NewNote from "./NewNote";
 /////
 import { useAppDispatch, useAppSelector } from "../hooks/redux-hooks";
-import { deleteNote, editIsOpen } from "../store/note-slice";
+import { editIsOpen } from "../store/note-slice";
+import { deleteNote } from "../store/note-fetching";
 import { openEdit, collectTags } from "../store/edit-slice";
 
 interface NotesListItemProps {
